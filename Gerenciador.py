@@ -1,6 +1,6 @@
 from uteis import *
 
-sg.theme('darkAmber')  # DarkPurple7
+sg.theme('darkAmber') 
 
 # layouts.
 
@@ -165,7 +165,6 @@ while True:
                                icon='dados/icones/FMA-logo.ico')
             else:
 
-                # verifica o novo status marcado no radio.
                 if valores['assistido']:
                     novo_status_anime = 'assistido'
                 elif valores['assistindo']:
@@ -177,7 +176,6 @@ while True:
                 elif valores['dropado']:
                     novo_status_anime = 'dropado'
 
-                # tenta atualizar o anime informado no InputText.
                 try:
                     anime.atualizar_anime(nome=valores['nome_anime_alterar'].strip().lower(), novo_status=novo_status_anime,
                                           novo_n_de_temporadas=valores['novo_n_de_temporadas'])
@@ -226,7 +224,6 @@ while True:
 
     except Exception as e:
         sg.popup_error(str(e.__cause__) + '\n' + str(e.__context__), no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
-        # print(str(e.__cause__) + '\n' + str(e.__context__))
         break
 
 janela.close()
