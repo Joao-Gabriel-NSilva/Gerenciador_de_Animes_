@@ -78,6 +78,45 @@ while True:
                 sg.popup_error('Não há nenhum anime marcado como "não assistido" nos arquivos!!', title='ERROR', background_color='snow3',
                                font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
 
+        elif eventos == 'Adicionar Anime':
+
+            if valores['anime_name'].strip() == '':
+                sg.popup_error('Nenhum nome foi informado!!', title='ERROR', background_color='snow3',
+                               font=('Mrs Eaves', 11), text_color='black',
+                               icon='dados/icones/FMA-logo.ico')
+            else:
+                if valores['radio1_assistido']:
+                    status_anime = 'assistido'
+                elif valores['radio1_não_assistido']:
+                    status_anime = 'não assistido'
+                elif valores['radio1_em_lançamento']:
+                    status_anime = 'em lançamento'
+                elif valores['radio1_assistindo']:
+                    status_anime = 'assistindo'
+
+                try:
+                    anime_ja_existe = anime.buscar(valores['anime_name'].lower())
+                    if not anime_ja_existe.empty:
+                        sg.popup_error(f"O anime '{valores['anime_name']}' já esta na lista.", title='ERROR',
+                                       background_color='snow3',
+                                       font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
+
+                except NameError:
+                    try:
+                        # adiciona o novo anime com os parâmetros recebidos do InputText.
+                        anime.adicionar_novo_anime(nome=valores['anime_name'], status=status_anime,
+                                                   temporadas=valores['temporadas'])
+                        sg.popup_quick_message('Anime adicionado!!', background_color='snow3', font=('Mrs Eaves', 11),
+                                               text_color='black')
+                        janela['anime_name'].update('')
+                        janela['temporadas'].update('')
+                    except ValueError:
+                        sg.popup_error("Todos os campos marcados com asterisco devem ser preenchidos!", title='ERROR',
+                                       background_color='snow3',
+                                       font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
+                except IndexError:
+                    anime.mostra_tabela(nome=valores['nome_anime_alterar'], title='Mais de um anime encontado')
+
         # eventos da barra de menu
         elif eventos == 'Todos os animes':
             anime.mostra_tabela()
@@ -93,43 +132,6 @@ while True:
         elif eventos == 'Animes':
             sg.popup_quick_message('Animes assistidos:  ' + str(anime.mostra_quantidade_assistidos()), no_titlebar=True, background_color='snow3',
                                    text_color='black', font=('Mrs Eaves', 11))
-
-        # eventos da segunda aba
-        elif eventos == 'Adicionar Anime':
-
-            if valores['anime_name'].strip() == '':
-                sg.popup_error('Nenhum nome foi informado!!', title='ERROR',  background_color='snow3', font=('Mrs Eaves', 11), text_color='black',
-                               icon='dados/icones/FMA-logo.ico')
-            else:
-                if valores['radio1_assistido']:
-                    status_anime = 'assistido'
-                elif valores['radio1_não_assistido']:
-                    status_anime = 'não assistido'
-                elif valores['radio1_em_lançamento']:
-                    status_anime = 'em lançamento'
-                elif valores['radio1_assistindo']:
-                    status_anime = 'assistindo'
-
-                try:
-                    anime_ja_existe = anime.buscar(valores['anime_name'].lower())
-                    if not anime_ja_existe.empty:
-                        sg.popup_error(f"O anime '{valores['anime_name']}' já esta na lista.", title='ERROR', background_color='snow3',
-                                       font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
-
-                except NameError:
-                    try:
-                        # adiciona o novo anime com os parâmetros recebidos do InputText.
-                        anime.adicionar_novo_anime(nome=valores['anime_name'], status=status_anime,
-                                                   temporadas=valores['temporadas'])
-                        sg.popup_quick_message('Anime adicionado!!', background_color='snow3', font=('Mrs Eaves', 11),
-                                               text_color='black')
-                        janela['anime_name'].update('')
-                        janela['temporadas'].update('')
-                    except ValueError:
-                        sg.popup_error("Todos os campos marcados com asterisco devem ser preenchidos!", title='ERROR', background_color='snow3',
-                                       font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
-                except IndexError:
-                    anime.mostra_tabela(nome=valores['nome_anime_alterar'], title='Mais de um anime encontado')
 
         # eventos da segunda aba
         elif eventos == 'buscar_anime':
@@ -225,8 +227,7 @@ while True:
                                    icon='dados/icones/FMA-logo.ico')
 
     except Exception as e:
-        sg.popup_error(str(e.__cause__) + '\n' + str(e.__context__), no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
-        # print(str(e.__cause__) + '\n' + str(e.__context__))
+        sg.popup_error(e, no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
         break
 
 janela.close()
