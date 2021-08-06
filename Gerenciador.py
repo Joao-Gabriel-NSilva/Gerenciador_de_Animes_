@@ -104,7 +104,6 @@ while True:
                     anime.mostra_tabela(nome=valores['nome_anime_alterar'], title='Mais de um anime encontado')
 
         elif eventos == 'Sortear Anime':
-            a = 10/0
             try:
                 a, sep = anime.sorteia()
                 sg.popup_no_buttons('O anime escolhido foi: ' + a, no_titlebar=True, icon='dados/icones/FMA-logo.ico', auto_close=True, auto_close_duration=3,
