@@ -1,5 +1,6 @@
 import sys
 import os
+import stat
 import pandas as pd
 import numpy as np
 import PySimpleGUI as sg
@@ -20,7 +21,7 @@ class Anime:
 
     @staticmethod
     def verificar_arquivo():
-        caminho = 'dados/arquivos'
+        caminho = r'dados/arquivos'
 
         arquivo = caminho + '/animes.csv'
         colunas_label = 'nome;status;temporadas'
@@ -31,6 +32,9 @@ class Anime:
         if not os.path.exists(arquivo):
             with open(arquivo, 'w') as f:
                 f.write(colunas_label)
+
+        st = os.stat(caminho)
+        os.chmod(caminho, st.st_mode | stat.S_IWOTH)
 
         return arquivo
 
@@ -46,7 +50,7 @@ class Anime:
         index = np.random.choice(indexes, 1)
         nome = self.dataset.iloc[index]['nome'].values[0]
         self.dataset.loc[index, 'status'] = 'assistindo'
-        self.dataset.to_csv('dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
+        self.dataset.to_csv(r'dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
 
         return nome
 
@@ -59,7 +63,7 @@ class Anime:
 
         self.dataset.sort_values(by=['nome'], inplace=True)
         self.dataset.index = [x for x in range(self.dataset.shape[0])]
-        self.dataset.to_csv('dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
+        self.dataset.to_csv(r'dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
 
     def atualizar_anime(self, nome, novo_status, novo_n_de_temporadas):
         selecao = self.buscar(nome)
@@ -71,13 +75,13 @@ class Anime:
 
         self.dataset.loc[self.dataset[selecao].index[0], ['temporadas']] = int(novo_n_de_temporadas)
         self.dataset.loc[self.dataset[selecao].index[0], ['status']] = novo_status
-        self.dataset.to_csv('dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
+        self.dataset.to_csv(r'dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
 
     def deletar_anime(self, nome):
         selecao = self.buscar(nome)
 
         self.dataset.drop(index=self.dataset[selecao].index[0], inplace=True)
-        self.dataset.to_csv('dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
+        self.dataset.to_csv(r'dados/arquivos/animes.csv', index=False, encoding='UTF-8', sep=';')
 
     def buscar(self, anime_buscado):
         selecao = self.dataset['nome'].str.lower().str.startswith(anime_buscado)
@@ -120,7 +124,7 @@ class Anime:
             view.resize(535, 800)
             view.setColumnWidth(0, 300)
             view.setWindowTitle(title)
-            view.setWindowIcon(QIcon('dados/icones/FMA logo.png'))
+            view.setWindowIcon(QIcon(r'dados/icones/FMA logo.png'))
             view.show()
             return app.exec_()
 

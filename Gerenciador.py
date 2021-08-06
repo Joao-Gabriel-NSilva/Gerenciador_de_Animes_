@@ -67,34 +67,6 @@ while True:
             break
 
         # eventos da aba inicial.
-
-        elif eventos == 'Sortear Anime':
-            try:
-                a, sep = anime.sorteia()
-                sg.popup_no_buttons('O anime escolhido foi: ' + a, no_titlebar=True, icon='dados/icones/FMA-logo.ico', auto_close=True, auto_close_duration=3,
-                                    background_color='black', text_color='white')
-
-            except ValueError:
-                sg.popup_error('Não há nenhum anime marcado como "não assistido" nos arquivos!!', title='ERROR', background_color='snow3',
-                               font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
-
-        # eventos da barra de menu
-        elif eventos == 'Todos os animes':
-            anime.mostra_tabela()
-        elif eventos == 'Animes em lançamento':
-            anime.mostra_tabela(status='em lançamento', title='Animes em lançamento')
-        elif eventos == 'Animes assistidos':
-            anime.mostra_tabela(status='assistido', title='Animes assistidos')
-        elif eventos == 'Assistindo atualmente':
-            anime.mostra_tabela(status='assistindo', title='Animes sendo assistidos atualmente', status2='em lançamento')
-        elif eventos == 'Não assistidos':
-            anime.mostra_tabela(status='não assistido', title='Animes não assistidos')
-
-        elif eventos == 'Animes':
-            sg.popup_quick_message('Animes assistidos:  ' + str(anime.mostra_quantidade_assistidos()), no_titlebar=True, background_color='snow3',
-                                   text_color='black', font=('Mrs Eaves', 11))
-
-        # eventos da segunda aba
         elif eventos == 'Adicionar Anime':
 
             if valores['anime_name'].strip() == '':
@@ -130,6 +102,33 @@ while True:
                                        font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
                 except IndexError:
                     anime.mostra_tabela(nome=valores['nome_anime_alterar'], title='Mais de um anime encontado')
+
+        elif eventos == 'Sortear Anime':
+            a = 10/0
+            try:
+                a, sep = anime.sorteia()
+                sg.popup_no_buttons('O anime escolhido foi: ' + a, no_titlebar=True, icon='dados/icones/FMA-logo.ico', auto_close=True, auto_close_duration=3,
+                                    background_color='black', text_color='white')
+
+            except ValueError:
+                sg.popup_error('Não há nenhum anime marcado como "não assistido" nos arquivos!!', title='ERROR', background_color='snow3',
+                               font=('Mrs Eaves', 11), text_color='black', icon='dados/icones/FMA-logo.ico')
+
+        # eventos da barra de menu
+        elif eventos == 'Todos os animes':
+            anime.mostra_tabela()
+        elif eventos == 'Animes em lançamento':
+            anime.mostra_tabela(status='em lançamento', title='Animes em lançamento')
+        elif eventos == 'Animes assistidos':
+            anime.mostra_tabela(status='assistido', title='Animes assistidos')
+        elif eventos == 'Assistindo atualmente':
+            anime.mostra_tabela(status='assistindo', title='Animes sendo assistidos atualmente', status2='em lançamento')
+        elif eventos == 'Não assistidos':
+            anime.mostra_tabela(status='não assistido', title='Animes não assistidos')
+
+        elif eventos == 'Animes':
+            sg.popup_quick_message('Animes assistidos:  ' + str(anime.mostra_quantidade_assistidos()), no_titlebar=True, background_color='snow3',
+                                   text_color='black', font=('Mrs Eaves', 11))
 
         # eventos da segunda aba
         elif eventos == 'buscar_anime':
@@ -225,6 +224,7 @@ while True:
                                    icon='dados/icones/FMA-logo.ico')
 
     except Exception as e:
-        sg.popup_error(str(e.__class__)[str(e.__class__).find("'") + 1: str(e.__class__).find(">") - 1], no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
+        sg.popup_error(str(e.__class__)[str(e.__class__).find("'") + 1: str(e.__class__).find(">") - 1] + '\n' +
+                       str(e.with_traceback(e.__traceback__)), no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
 
 janela.close()
