@@ -225,8 +225,6 @@ while True:
                                    icon='dados/icones/FMA-logo.ico')
 
     except Exception as e:
-        sg.popup_error(str(e.__cause__) + '\n' + str(e.__context__), no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
-        # print(str(e.__cause__) + '\n' + str(e.__context__))
-        break
+        sg.popup_error(str(e.__class__)[str(e.__class__).find("'") + 1: str(e.__class__).find(">") - 1], no_titlebar=True, background_color='snow3', font=('Mrs Eaves', 11), text_color='black')
 
 janela.close()
